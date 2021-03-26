@@ -1,4 +1,4 @@
-# gefragtgejagt
+# QuietQuiz
 
 ## Project setup
 ```
