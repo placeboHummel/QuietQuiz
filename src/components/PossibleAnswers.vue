@@ -15,7 +15,7 @@
     </div>
     <div v-if="decisionMade">
       <h2 class="right" v-if="questionIsCorrect">Das war richtig!</h2>
-      <h2 class="wrong" v-else>Was war leider falsch.</h2>
+      <h2 class="wrong" v-else>Das war leider falsch.</h2>
     </div>
   </div>
 </template>
