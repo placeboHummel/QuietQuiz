@@ -3,11 +3,15 @@
     <img src="https://i.ibb.co/ZMZShv1/quiz.png" />
     <Challenge :question="question.question" />
     <div class="options">
-      <PossibleAnswers :answers="answers" :correctAnswer="correctAnswer" />
+      <PossibleAnswers :answers="answers" @checkAnswer="checkAnswer" />
     </div>
-    <div><Feedback /></div>
     <div>
-      <button onClick="window.location.reload();">Nächste Frage</button>
+      <Feedback v-if="decisionMade" :questionIsCorrect="questionIsCorrect" />
+    </div>
+    <div>
+      <button class="button" onClick="window.location.reload();">
+        Nächste Frage
+      </button>
     </div>
   </div>
 </template>
@@ -73,9 +77,12 @@ export default {
           correct: 1
         }
       ],
+      questionIsCorrect: false,
+      decisionMade: false,
       question: null,
       answers: null,
-      correctAnswer: null
+      correctAnswer: null,
+      message: "Hello"
     };
   },
   created() {
@@ -86,7 +93,19 @@ export default {
       this.challenges[random].correct
     ];
   },
-  methods: {}
+  methods: {
+    checkAnswer(selectedAnswer) {
+      if (this.decisionMade === false) {
+        if (this.correctAnswer === selectedAnswer) {
+          this.questionIsCorrect = true;
+        } else {
+          this.questionIsCorrect = false;
+        }
+
+        this.decisionMade = true;
+      }
+    }
+  }
 };
 </script>
 
@@ -98,21 +117,6 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 10px;
-}
-
-button {
-  display: inline-block;
-  padding: 0.5em 3em;
-  border: 0.16em solid #ffffff;
-  margin: 0 0.3em 0.3em 0;
-  box-sizing: border-box;
-  text-decoration: none;
-  text-transform: uppercase;
-  font-family: "Roboto", sans-serif;
-  font-weight: 400;
-  color: black;
-  text-align: center;
-  transition: all 0.15s;
 }
 
 button:hover {

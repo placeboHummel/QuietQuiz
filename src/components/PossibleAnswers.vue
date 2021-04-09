@@ -1,21 +1,12 @@
 <template>
   <div>
-    <div
-      class="card"
-      :class="decisionMade ? 'hide' : ''"
-      v-for="a in answers"
-      :key="a.answers"
-    >
+    <div class="card" v-for="answer in answers" :key="answer.answers">
       <div class="container">
         <h4>
-          <b>{{ a }}</b>
+          <b>{{ answer }}</b>
         </h4>
-        <p><button v-on:click="checkAnswer(a)">Wählen</button></p>
+        <p><button v-on:click="checkAnswer(answer)">Wählen</button></p>
       </div>
-    </div>
-    <div v-if="decisionMade">
-      <h2 class="right" v-if="questionIsCorrect">Das war richtig!</h2>
-      <h2 class="wrong" v-else>Das war leider falsch.</h2>
     </div>
   </div>
 </template>
@@ -24,26 +15,11 @@
 export default {
   name: "PossibleAnswers",
   props: {
-    answers: Array,
-    correctAnswer: String
-  },
-  data() {
-    return {
-      questionIsCorrect: false,
-      decisionMade: false
-    };
+    answers: Array
   },
   methods: {
     checkAnswer(selectedAnswer) {
-      if (this.decisionMade === false) {
-        if (this.correctAnswer === selectedAnswer) {
-          this.questionIsCorrect = true;
-        } else {
-          this.questionIsCorrect = false;
-        }
-
-        this.decisionMade = true;
-      }
+      this.$emit("checkAnswer", selectedAnswer);
     }
   }
 };
