@@ -1,14 +1,9 @@
 <template>
   <div>
     <div v-for="answer in answers" :key="answer.answers">
-      <div class="">
-        <div class="box">
-          <div class="title is-5">{{ answer }}</div>
-          <p>
-            <button class="button" v-on:click="checkAnswer(answer)">
-              Wählen
-            </button>
-          </p>
+      <div v-if="!decisionMade">
+        <div class="box title is-6" v-on:click="checkAnswer(answer)">
+          {{ answer }}
         </div>
       </div>
     </div>
@@ -19,7 +14,8 @@
 export default {
   name: "PossibleAnswers",
   props: {
-    answers: Array
+    answers: Array,
+    decisionMade: Boolean
   },
   methods: {
     checkAnswer(selectedAnswer) {
@@ -32,5 +28,6 @@ export default {
 .box {
   margin-bottom: 1rem;
   padding: 3%;
+  cursor: pointer;
 }
 </style>

@@ -4,14 +4,22 @@
       <img src="https://i.ibb.co/ZMZShv1/quiz.png" />
       <Challenge :question="question.question" />
       <div class="options">
-        <PossibleAnswers :answers="answers" @checkAnswer="checkAnswer" />
+        <PossibleAnswers
+          :decisionMade="decisionMade"
+          :answers="answers"
+          @checkAnswer="checkAnswer"
+        />
       </div>
       <div>
         <Feedback v-if="decisionMade" :questionIsCorrect="questionIsCorrect" />
       </div>
       <div>
-        <button class="button" onClick="window.location.reload();">
-          Nächste Frage
+        <button
+          class="button is-fullwidth"
+          v-if="decisionMade"
+          onClick="window.location.reload();"
+        >
+          Weiter
         </button>
       </div>
     </div>
@@ -83,8 +91,7 @@ export default {
       decisionMade: false,
       question: null,
       answers: null,
-      correctAnswer: null,
-      message: "Hello"
+      correctAnswer: null
     };
   },
   created() {
