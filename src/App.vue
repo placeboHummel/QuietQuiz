@@ -2,25 +2,47 @@
   <div class="columns is-centered">
     <div class="column is-half has-text-centered">
       <img src="https://i.ibb.co/ZMZShv1/quiz.png" />
-      <Challenge :question="question.question" />
+
+      <Challenge
+        :question="question.question"
+        :class="questionIndex === 5 ? 'hide' : 'show'"
+        :questionIndex="questionIndex"
+      />
+
+      <br />
+
       <div class="options">
         <PossibleAnswers
           :decisionMade="decisionMade"
           :answers="answers"
           @checkAnswer="checkAnswer"
+          :class="questionIndex === 5 ? 'hide' : 'show'"
         />
       </div>
+
       <div>
         <Feedback v-if="decisionMade" :questionIsCorrect="questionIsCorrect" />
       </div>
+
       <div>
         <button
           class="button is-fullwidth"
+          v-on:click="next()"
           v-if="decisionMade"
-          onClick="window.location.reload();"
         >
           Weiter
         </button>
+      </div>
+
+      <div
+        class="notification is-primary"
+        v-on:click="reloadPage()"
+        v-if="questionIndex === 5"
+      >
+        Spiel beendet!
+        <br />
+        <br />
+        Klick hier für eine neue Runde.
       </div>
     </div>
   </div>
@@ -91,16 +113,13 @@ export default {
       decisionMade: false,
       question: null,
       answers: null,
-      correctAnswer: null
+      correctAnswer: null,
+      questionIndex: 0
     };
   },
   created() {
-    let random = Math.floor(Math.random() * this.challenges.length);
-    this.question = this.challenges[random];
-    this.answers = this.challenges[random].answers;
-    this.correctAnswer = this.challenges[random].answers[
-      this.challenges[random].correct
-    ];
+    this.challenges = this.challenges.sort(() => Math.random() - 0.5);
+    this.next();
   },
   methods: {
     checkAnswer(selectedAnswer) {
@@ -113,6 +132,18 @@ export default {
 
         this.decisionMade = true;
       }
+    },
+    next() {
+      this.questionIndex++;
+      this.question = this.challenges[this.questionIndex];
+      this.answers = this.challenges[this.questionIndex].answers;
+      this.correctAnswer = this.challenges[this.questionIndex].answers[
+        this.challenges[this.questionIndex].correct
+      ];
+      this.decisionMade = false;
+    },
+    reloadPage() {
+      window.location.reload();
     }
   }
 };
@@ -125,5 +156,13 @@ export default {
 
 img {
   margin-bottom: 1rem;
+}
+
+.show {
+  display: block;
+}
+
+.hide {
+  display: none;
 }
 </style>

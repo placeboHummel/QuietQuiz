@@ -27,7 +27,6 @@ export default {
 <style scoped>
 .box {
   margin-bottom: 1rem;
-  padding: 3%;
   cursor: pointer;
 }
 </style>

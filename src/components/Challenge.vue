@@ -1,14 +1,22 @@
 <template>
-  <div class="title is-5">{{ question }}</div>
+  <div>
+    <div class="tag alignright">{{ questionIndex }}/5</div>
+    <div class="title is-5">{{ question }}</div>
+  </div>
 </template>
 
 <script>
 export default {
   name: "Challenge",
   props: {
-    question: String
+    question: String,
+    questionIndex: Number
   }
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.alignright {
+  float: right;
+}
+</style>
