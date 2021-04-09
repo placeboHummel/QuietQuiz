@@ -1,17 +1,19 @@
 <template>
-  <div class="app">
-    <img src="https://i.ibb.co/ZMZShv1/quiz.png" />
-    <Challenge :question="question.question" />
-    <div class="options">
-      <PossibleAnswers :answers="answers" @checkAnswer="checkAnswer" />
-    </div>
-    <div>
-      <Feedback v-if="decisionMade" :questionIsCorrect="questionIsCorrect" />
-    </div>
-    <div>
-      <button class="button" onClick="window.location.reload();">
-        Nächste Frage
-      </button>
+  <div class="columns is-centered">
+    <div class="column is-half has-text-centered">
+      <img src="https://i.ibb.co/ZMZShv1/quiz.png" />
+      <Challenge :question="question.question" />
+      <div class="options">
+        <PossibleAnswers :answers="answers" @checkAnswer="checkAnswer" />
+      </div>
+      <div>
+        <Feedback v-if="decisionMade" :questionIsCorrect="questionIsCorrect" />
+      </div>
+      <div>
+        <button class="button" onClick="window.location.reload();">
+          Nächste Frage
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -110,22 +112,11 @@ export default {
 </script>
 
 <style>
-.app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 10px;
+.column.is-half {
+  margin: 1rem;
 }
 
-button:hover {
-  color: black;
-  border-color: #dddddd;
-}
-
-button:active {
-  color: black;
-  border-color: #bbbbbb;
+img {
+  margin-bottom: 1rem;
 }
 </style>

@@ -1,7 +1,9 @@
 <template>
   <div>
-    <h2 class="right" v-if="questionIsCorrect">Das war richtig!</h2>
-    <h2 class="wrong" v-else>Das war leider falsch.</h2>
+    <div class="notification is-success" v-if="questionIsCorrect">
+      Das war richtig!
+    </div>
+    <div class="notification is-danger" v-else>Das war leider falsch.</div>
   </div>
 </template>
 
@@ -14,4 +16,13 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.notification.is-success {
+  margin-bottom: 1rem;
+}
+
+.notification.is-danger {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+</style>

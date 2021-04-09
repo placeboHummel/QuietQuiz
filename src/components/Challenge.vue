@@ -1,5 +1,5 @@
 <template>
-  <h3>{{ question }}</h3>
+  <div class="title is-5">{{ question }}</div>
 </template>
 
 <script>
@@ -11,8 +11,4 @@ export default {
 };
 </script>
 
-<style scoped>
-h1 {
-  margin: 2rem;
-}
-</style>
+<style scoped></style>
