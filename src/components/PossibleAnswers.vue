@@ -19,20 +19,24 @@ export default {
     },
     correctAnswer: String
   },
+  data() {
+    return {
+      selected: String
+    };
+  },
   methods: {
     checkAnswer(selectedAnswer) {
       this.$emit("checkAnswer", selectedAnswer);
+      this.selected = selectedAnswer;
     },
-    classes(selectedAnswer) {
+    classes(answer) {
       let classes = ["box", "title", "is-6"];
       if (this.decisionMade) {
-        if (selectedAnswer === this.correctAnswer) {
+        if (answer === this.correctAnswer) {
           classes.push("has-background-success");
-        } else {
+        } else if (answer === this.selected) {
           classes.push("has-background-danger");
         }
-
-        console.log(selectedAnswer);
       }
       return classes;
     }

@@ -60,47 +60,55 @@ export default {
       challenges: [
         {
           question: "Wie viele Einwoher hat Hamburg?",
-          answers: ["1-2 Millionen", "2-3 Millionen"],
+          answers: [
+            "1-2 Millionen",
+            "2-3 Millionen",
+            "3,1 Millionen",
+            "0,9 Millionen"
+          ],
           correct: 0
         },
         {
           question: "Wie heißt der Hamburger Bürgermeister?",
-          answers: ["Olaf Scholz", "Peter Tschentscher"],
-          correct: 1
-        },
-        {
-          question: "Wie viele Brücken hat Hamburg?",
-          answers: ["1750", "2500"],
-          correct: 1
-        },
-        {
-          question: "Was bedeutet „Covid“?",
           answers: [
-            "Challenging obstructive vital disorder",
-            "Coronavirus disease"
+            "Olaf Scholz",
+            "Peter Tschentscher",
+            "Klaus Heimer",
+            "Markus Heimel"
           ],
           correct: 1
         },
         {
+          question: "Wie viele Brücken hat Hamburg?",
+          answers: ["1750", "2500", "920", "3100"],
+          correct: 1
+        },
+
+        {
           question: "Wo wurde TV-Koch Tim Mälzer geboren?",
-          answers: ["Elmshorn", "Eimsbüttel"],
+          answers: ["Elmshorn", "Eimsbüttel", "Barmbek", "Horn"],
           correct: 0
         },
         {
           question:
             "Wo trat die erste bestätigte Infektion außerhalb Chinas auf?",
-          answers: ["Thailand", "Japan"],
+          answers: ["Thailand", "Japan", "Neuseeland", "Papua-Neuguinea"],
           correct: 0
         },
         {
           question:
             "5G schafft die fünffache Geschwindigkeit des bisherigen Datenverkehrs.",
-          answers: ["Stimmmt", "Stimmt nicht"],
+          answers: ["Stimmmt", "Stimmt nicht", "5G ist tödlich", "Was ist 5G?"],
           correct: 1
         },
         {
           question: "Was wurde früher auf der Reeperbahn hergestellt?",
-          answers: ["Schwerter", "Seile"],
+          answers: [
+            "Schwerter",
+            "Seile",
+            "Verhütungsmittel",
+            "Straßenlaternen"
+          ],
           correct: 1
         }
       ],
