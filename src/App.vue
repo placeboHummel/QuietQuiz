@@ -17,11 +17,8 @@
           :answers="answers"
           @checkAnswer="checkAnswer"
           :class="questionIndex === 5 ? 'hide' : 'show'"
+          :correctAnswer="correctAnswer"
         />
-      </div>
-
-      <div>
-        <Feedback v-if="decisionMade" :questionIsCorrect="questionIsCorrect" />
       </div>
 
       <div>
@@ -51,14 +48,12 @@
 <script>
 import Challenge from "./components/Challenge.vue";
 import PossibleAnswers from "./components/PossibleAnswers.vue";
-import Feedback from "./components/Feedback.vue";
 
 export default {
   name: "App",
   components: {
     Challenge,
-    PossibleAnswers,
-    Feedback
+    PossibleAnswers
   },
   data() {
     return {
