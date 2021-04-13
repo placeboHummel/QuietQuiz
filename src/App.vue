@@ -36,7 +36,7 @@
 
       <div
         class="notification is-primary"
-        v-on:click="reloadPage()"
+        v-on:click="newGame()"
         v-if="questionIndex === 5"
       >
         Spiel beendet!
@@ -118,7 +118,7 @@ export default {
     };
   },
   created() {
-    this.challenges = this.challenges.sort(() => Math.random() - 0.5);
+    this.newGame();
     this.next();
   },
   methods: {
@@ -142,8 +142,9 @@ export default {
       ];
       this.decisionMade = false;
     },
-    reloadPage() {
-      window.location.reload();
+    newGame() {
+      this.challenges = this.challenges.sort(() => Math.random() - 0.5);
+      this.questionIndex = 0;
     }
   }
 };
