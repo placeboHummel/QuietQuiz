@@ -27,7 +27,9 @@ export default {
   methods: {
     checkAnswer(selectedAnswer) {
       this.$emit("checkAnswer", selectedAnswer);
-      this.selected = selectedAnswer;
+      if (this.decisionMade === false) {
+        this.selected = selectedAnswer;
+      }
     },
     classes(answer) {
       let classes = ["box", "title", "is-6"];
