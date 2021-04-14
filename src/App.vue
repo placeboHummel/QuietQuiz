@@ -61,12 +61,12 @@ export default {
         {
           question: "Wie viele Einwoher hat Hamburg?",
           answers: [
-            "1-2 Millionen",
             "2-3 Millionen",
             "3,1 Millionen",
+            "1-2 Millionen",
             "0,9 Millionen"
           ],
-          correct: 0
+          correct: 2
         },
         {
           question: "Wie heißt der Hamburger Bürgermeister?",
@@ -80,8 +80,8 @@ export default {
         },
         {
           question: "Wie viele Brücken hat Hamburg?",
-          answers: ["1750", "2500", "920", "3100"],
-          correct: 1
+          answers: ["1750", "920", "3100", "2500"],
+          correct: 3
         },
 
         {
@@ -91,9 +91,9 @@ export default {
         },
         {
           question:
-            "Wo trat die erste bestätigte Infektion außerhalb Chinas auf?",
-          answers: ["Thailand", "Japan", "Neuseeland", "Papua-Neuguinea"],
-          correct: 0
+            "Wo trat die erste bestätigte Covid-19 Infektion außerhalb Chinas auf?",
+          answers: ["Japan", "Neuseeland", "Papua-Neuguinea", "Thailand"],
+          correct: 3
         },
         {
           question:
@@ -105,11 +105,11 @@ export default {
           question: "Was wurde früher auf der Reeperbahn hergestellt?",
           answers: [
             "Schwerter",
-            "Seile",
             "Verhütungsmittel",
-            "Straßenlaternen"
+            "Straßenlaternen",
+            "Seile"
           ],
-          correct: 1
+          correct: 3
         }
       ],
       questionIsCorrect: false,
