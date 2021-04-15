@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="tag alignright">{{ questionIndex }}/5</div>
-    <div class="title is-5">{{ question }}</div>
+    <div class="title is-5" v-html="question"></div>
   </div>
 </template>
 

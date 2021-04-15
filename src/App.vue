@@ -3,151 +3,135 @@
     <div class="column is-half has-text-centered">
       <img src="https://i.ibb.co/ZMZShv1/quiz.png" />
 
-      <Challenge
-        :question="question.question"
-        :class="questionIndex === 5 ? 'hide' : 'show'"
-        :questionIndex="questionIndex"
-      />
+      <h1 class="title is-1" v-if="!this.api_challenges">
+        <img src="./assets/giphy.gif" />
+      </h1>
 
-      <br />
-
-      <div class="options">
-        <PossibleAnswers
-          :decisionMade="decisionMade"
-          :answers="answers"
-          @checkAnswer="checkAnswer"
-          :class="questionIndex === 5 ? 'hide' : 'show'"
-          :correctAnswer="correctAnswer"
+      <div v-if="this.api_challenges">
+        <Challenge
+          :question="api_question.question"
+          :class="questionIndex === 6 ? 'hide' : 'show'"
+          :questionIndex="questionIndex"
         />
-      </div>
+        <hr />
 
-      <div>
+        <div v-if="questionIndex < 6">
+          <Answer
+            v-for="answer in api_question.answers"
+            :key="answer"
+            :answer="answer"
+            :is-correct="answer === api_question.correctAnswer"
+            @click="checkAnswer"
+          />
+        </div>
+        <br />
+        <div v-if="decisionMade">
+          <div v-if="questionIsCorrect" style="color: green">
+            Du liegst richtig.
+          </div>
+          <div v-else style="color: red">Du liegst leider daneben.</div>
+        </div>
+        <br />
+
         <button
           class="button is-fullwidth"
           v-on:click="next()"
-          v-if="decisionMade"
+          v-if="decisionMade && questionIndex < 6"
         >
           Weiter
         </button>
-      </div>
 
-      <div
-        class="notification is-primary"
-        v-on:click="newGame()"
-        v-if="questionIndex === 5"
-      >
-        Spiel beendet!
         <br />
-        <br />
-        Klick hier für eine neue Runde.
+        <div
+          class="button is-primary"
+          v-on:click="newGame()"
+          v-if="questionIndex === 6"
+        >
+          Spiel beendet! Neue Runde?
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
 import Challenge from "./components/Challenge.vue";
-import PossibleAnswers from "./components/PossibleAnswers.vue";
+import Answer from "./components/Answer.vue";
 
 export default {
   name: "App",
   components: {
     Challenge,
-    PossibleAnswers
+    Answer
   },
   data() {
     return {
-      challenges: [
-        {
-          question: "Wie viele Einwoher hat Hamburg?",
-          answers: [
-            "2-3 Millionen",
-            "3,1 Millionen",
-            "1-2 Millionen",
-            "0,9 Millionen"
-          ],
-          correct: 2
-        },
-        {
-          question: "Wie heißt der Hamburger Bürgermeister?",
-          answers: [
-            "Olaf Scholz",
-            "Peter Tschentscher",
-            "Klaus Heimer",
-            "Markus Heimel"
-          ],
-          correct: 1
-        },
-        {
-          question: "Wie viele Brücken hat Hamburg?",
-          answers: ["1750", "920", "3100", "2500"],
-          correct: 3
-        },
-
-        {
-          question: "Wo wurde TV-Koch Tim Mälzer geboren?",
-          answers: ["Elmshorn", "Eimsbüttel", "Barmbek", "Horn"],
-          correct: 0
-        },
-        {
-          question:
-            "Wo trat die erste bestätigte Covid-19 Infektion außerhalb Chinas auf?",
-          answers: ["Japan", "Neuseeland", "Papua-Neuguinea", "Thailand"],
-          correct: 3
-        },
-        {
-          question:
-            "5G schafft die fünffache Geschwindigkeit des bisherigen Datenverkehrs.",
-          answers: ["Stimmmt", "Stimmt nicht", "5G ist tödlich", "Was ist 5G?"],
-          correct: 1
-        },
-        {
-          question: "Was wurde früher auf der Reeperbahn hergestellt?",
-          answers: [
-            "Schwerter",
-            "Verhütungsmittel",
-            "Straßenlaternen",
-            "Seile"
-          ],
-          correct: 3
-        }
-      ],
-      questionIsCorrect: false,
       decisionMade: false,
-      question: null,
-      answers: null,
-      correctAnswer: null,
-      questionIndex: 0
+      questionIndex: 0,
+      questionIsCorrect: false,
+
+      // oder als leeres Array?
+      api_challenges: undefined
     };
   },
   created() {
-    this.newGame();
     this.next();
+
+    // TODOS:
+    // - Refactoring gedanklich erneut durchgehen, Nachvollziehbarkeit sicherstellen
+    // - next() Methode reparieren
+    // - die stelle der richtigen Antwort soll zufällig vergeben werden
+
+    axios
+      .get(
+        "https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=multiple"
+      )
+      .then(response => {
+        this.api_challenges = response.data.results;
+      });
+  },
+  computed: {
+    api_question() {
+      if (!this.api_challenges) {
+        return null;
+      }
+      const question = this.api_challenges[this.questionIndex];
+      return {
+        question: question.question,
+        answers: question.incorrect_answers
+          .concat(question.correct_answer)
+          .sort(() => Math.random() - 0.5),
+        correctAnswer: question.correct_answer
+      };
+    }
   },
   methods: {
-    checkAnswer(selectedAnswer) {
+    checkAnswer(isCorrectAnswer) {
+      console.log(isCorrectAnswer);
       if (this.decisionMade === false) {
-        if (this.correctAnswer === selectedAnswer) {
-          this.questionIsCorrect = true;
-        } else {
-          this.questionIsCorrect = false;
-        }
-
+        this.questionIsCorrect = isCorrectAnswer;
         this.decisionMade = true;
       }
     },
     next() {
       this.questionIndex++;
-      this.question = this.challenges[this.questionIndex];
-      this.answers = this.challenges[this.questionIndex].answers;
-      this.correctAnswer = this.challenges[this.questionIndex].answers[
-        this.challenges[this.questionIndex].correct
-      ];
+      this.questionIsCorrect = false;
       this.decisionMade = false;
     },
     newGame() {
-      this.challenges = this.challenges.sort(() => Math.random() - 0.5);
-      this.questionIndex = 0;
+      this.questionIndex = 1;
+      this.questionIsCorrect = false;
+      this.decisionMade = false;
+      this.api_challenges = undefined;
+
+      axios
+        .get(
+          "https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=multiple"
+        )
+        .then(response => {
+          this.api_challenges = response.data.results;
+        });
     }
   }
 };
