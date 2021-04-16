@@ -1,55 +1,49 @@
 <template>
   <div class="columns is-centered">
     <div class="column is-half has-text-centered">
-      <img src="https://i.ibb.co/ZMZShv1/quiz.png" />
-
-      <h1 class="title is-1" v-if="!this.api_challenges">
-        <img src="./assets/giphy.gif" />
-      </h1>
-
-      <div v-if="this.api_challenges">
-        <Challenge
-          :question="api_question.question"
-          :class="questionIndex === 6 ? 'hide' : 'show'"
-          :questionIndex="questionIndex"
-        />
-        <hr />
-
-        <div v-if="questionIndex < 6">
-          <Answer
-            v-for="answer in api_question.answers"
-            :key="answer"
-            :answer="answer"
-            :is-correct="answer === api_question.correctAnswer"
-            @click="checkAnswer"
-          />
+      <div class="heading">Smarticus</div>
+      <div class="columns is-mobile has-text-centered">
+        <div class="column" v-on:click="newGame()">
+          <div class="tag is-success newgame">Neues Spiel</div>
         </div>
-        <br />
-        <div v-if="decisionMade">
-          <div v-if="questionIsCorrect" style="color: green">
-            Du liegst richtig.
-          </div>
-          <div v-else style="color: red">Du liegst leider daneben.</div>
+        <div class="column">
+          <div class="tag">{{ index }}</div>
         </div>
-        <br />
-
-        <button
-          class="button is-fullwidth"
-          v-on:click="next()"
-          v-if="decisionMade && questionIndex < 6"
-        >
-          Weiter
-        </button>
-
-        <br />
-        <div
-          class="button is-primary"
-          v-on:click="newGame()"
-          v-if="questionIndex === 6"
-        >
-          Spiel beendet! Neue Runde?
+        <div class="column">
+          <div class="tag">Punkte: {{ points }}</div>
         </div>
       </div>
+      <div v-if="!gameOver">
+        <h1 class="title is-1" v-if="!this.challenges">
+          <img src="./assets/giphy.gif" />
+        </h1>
+
+        <div v-if="this.challenges">
+          <Challenge
+            :question="currentChallenge.question"
+            :questionIndex="questionIndex"
+          />
+          <br />
+          <Answer
+            v-for="answer in currentChallenge.answers"
+            :key="answer"
+            :answer="answer"
+            :is-correct="answer === currentChallenge.correctAnswer"
+            :decisionMade="decisionMade"
+            @click="checkAnswer"
+          />
+
+          <br />
+          <button
+            class="button is-light is-fullwidth"
+            v-on:click="next()"
+            v-if="decisionMade && questionIndex < 6"
+          >
+            ➔
+          </button>
+        </div>
+      </div>
+      <GameOver :points="points" v-if="gameOver" v-on:click="newGame()" />
     </div>
   </div>
 </template>
@@ -58,21 +52,24 @@
 import axios from "axios";
 import Challenge from "./components/Challenge.vue";
 import Answer from "./components/Answer.vue";
+import GameOver from "./components/GameOver.vue";
 
 export default {
   name: "App",
   components: {
     Challenge,
-    Answer
+    Answer,
+    GameOver
   },
   data() {
     return {
       decisionMade: false,
       questionIndex: 0,
       questionIsCorrect: false,
+      points: 0,
 
       // oder als leeres Array?
-      api_challenges: undefined
+      challenges: undefined
     };
   },
   created() {
@@ -88,30 +85,47 @@ export default {
         "https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=multiple"
       )
       .then(response => {
-        this.api_challenges = response.data.results;
+        this.challenges = response.data.results;
       });
   },
   computed: {
-    api_question() {
-      if (!this.api_challenges) {
+    currentChallenge() {
+      if (!this.challenges) {
         return null;
       }
-      const question = this.api_challenges[this.questionIndex];
+      const current_challenge = this.challenges[this.questionIndex];
       return {
-        question: question.question,
-        answers: question.incorrect_answers
-          .concat(question.correct_answer)
+        question: current_challenge.question,
+        answers: current_challenge.incorrect_answers
+          .concat(current_challenge.correct_answer)
           .sort(() => Math.random() - 0.5),
-        correctAnswer: question.correct_answer
+        correctAnswer: current_challenge.correct_answer
       };
+    },
+    gameOver() {
+      if (this.questionIndex >= 6) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    index() {
+      if (this.questionIndex > 5) {
+        return "Spielende";
+      } else {
+        return "Frage " + this.questionIndex + "/5";
+      }
     }
   },
   methods: {
     checkAnswer(isCorrectAnswer) {
-      console.log(isCorrectAnswer);
       if (this.decisionMade === false) {
         this.questionIsCorrect = isCorrectAnswer;
         this.decisionMade = true;
+
+        if (isCorrectAnswer) {
+          this.points++;
+        }
       }
     },
     next() {
@@ -121,16 +135,17 @@ export default {
     },
     newGame() {
       this.questionIndex = 1;
+      this.points = 0;
       this.questionIsCorrect = false;
       this.decisionMade = false;
-      this.api_challenges = undefined;
+      this.challenges = undefined;
 
       axios
         .get(
           "https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=multiple"
         )
         .then(response => {
-          this.api_challenges = response.data.results;
+          this.challenges = response.data.results;
         });
     }
   }
@@ -138,6 +153,8 @@ export default {
 </script>
 
 <style>
+@import url("https://fonts.googleapis.com/css2?family=Monoton&display=swap");
+
 .column.is-half {
   margin: 1rem;
 }
@@ -152,5 +169,15 @@ img {
 
 .hide {
   display: none;
+}
+
+.heading {
+  font-family: "Monoton", cursive;
+  font-size: 40px !important;
+  margin-bottom: 9rem;
+}
+
+.newgame {
+  cursor: pointer;
 }
 </style>

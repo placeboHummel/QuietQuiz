@@ -1,7 +1,6 @@
 <template>
   <div>
-    <div class="tag alignright">{{ questionIndex }}/5</div>
-    <div class="title is-5" v-html="question"></div>
+    <div class="notification vcentered" v-html="question"></div>
   </div>
 </template>
 
@@ -16,7 +15,17 @@ export default {
 </script>
 
 <style scoped>
-.alignright {
-  float: right;
+.tag {
+  margin-bottom: 0.4rem;
+}
+
+.vcentered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.notification {
+  height: 8rem;
 }
 </style>
